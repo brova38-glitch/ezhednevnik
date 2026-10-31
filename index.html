@@ -142,5 +142,6 @@ const fr=$('ffr').value,to=$('fto').value;for(const k in plan){if(!plan[k]){dele
 S('ezh_work',WK);$('fsh').classList.remove('open');cal()};
 const close=()=>$('sh').classList.remove('open');$('cn').onclick=close;$('sh').onclick=e=>{if(e.target.id=='sh')close()};
 $('sf').onsubmit=e=>{e.preventDefault();const v=$('si').value.trim();if(!v)return;if(tab==1){(T[sel]=T[sel]||[]).push({text:v,done:false});S('ezh_tasks',T);cal()}else{if(!$('rt').value)return;R.push({time:$('rt').value,text:v});S('ezh_rem',R);rem()}close()};
-[1,2,3].forEach(i=>$('b'+i).onclick=()=>setTab(i));rem();setTab(+localStorage.getItem('ezh_tab')||(localStorage.getItem('ezh_mode')=='w'?3:1));if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+[1,2,3].forEach(i=>$('b'+i).onclick=()=>setTab(i));rem();setTab(+localStorage.getItem('ezh_tab')||(localStorage.getItem('ezh_mode')=='w'?3:1));if('serviceWorker'in navigator){let rl=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!rl){rl=true;location.reload()}});
+navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(reg=>{const u=()=>reg.update().catch(()=>{});u();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')u()})})}
 </script></body></html>
