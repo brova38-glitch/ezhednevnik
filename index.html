@@ -80,7 +80,7 @@ textarea{resize:none;min-height:70px}
 .two{display:flex;gap:8px}.two>*{flex:1}
 .stg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.stg button{min-height:52px;border-radius:16px;border:2px solid transparent;font-size:16px;font-weight:700;color:#fff}.stg button.on{border-color:var(--tx)}.stg .clr{background:var(--gl2);color:var(--tx)}
 .lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mu);margin-top:10px}.lg span{display:flex;align-items:center;gap:5px}.lg i{width:12px;height:12px;border-radius:4px}
-.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}.sum div{background:var(--gl2);border:1px solid var(--bd);border-radius:16px;padding:12px 6px;text-align:center}.sum b{display:block;font-size:24px;font-weight:800}.sum small{color:var(--mu);font-size:12px}
+.sum4{grid-template-columns:repeat(4,1fr)!important}.sum4 b{font-size:19px!important}.sum4 small{font-size:11px}.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}.sum div{background:var(--gl2);border:1px solid var(--bd);border-radius:16px;padding:12px 6px;text-align:center}.sum b{display:block;font-size:24px;font-weight:800}.sum small{color:var(--mu);font-size:12px}
 .mu{color:var(--mu);font-size:14px}.ctr{text-align:center}
 .hero{display:flex;align-items:center;gap:16px}
 .ring{width:84px;height:84px;flex:0 0 84px;position:relative}.ring svg{transform:rotate(-90deg)}.ring circle{fill:none;stroke-width:9}.ring .tr{stroke:var(--gl2)}.ring .pg{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.2,.9,.3,1);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ac) 70%,transparent))}
@@ -121,12 +121,12 @@ textarea{resize:none;min-height:70px}
 </section>
 <section class="view" id="v-work">
  <div class="card"><div class="mh"><button class="ib" id="wpv" aria-label="Назад">‹</button><b id="wmt"></b><button class="ib" id="wnx" aria-label="Вперёд">›</button></div><div class="g wk" id="wgrid"></div><div class="lg" id="lg"></div></div>
- <div class="card"><b id="wst" style="font-size:19px"></b><div class="sum" id="sum" style="margin-top:10px"></div>
- <button class="wide pri" id="fill" style="margin-top:10px">⚡ Заполнить по графику</button><p class="mu ctr" style="margin:10px 0 0">Нажмите на день, чтобы отметить смену. Неотмеченный день — выходной</p></div>
+ <div class="card"><b id="wst" style="font-size:19px"></b><div class="sum sum4" id="sum" style="margin-top:10px"></div>
+ <button class="wide pri" id="fill" style="margin-top:10px">⚡ Заполнить по графику</button><p class="mu ctr" style="margin:10px 0 0">Нажмите на день, чтобы отметить смену. Неотмеченный день — выходной</p><p class="ctr" style="margin:8px 0 0"><a href="#" id="impl" style="color:var(--ac)">📥 Импорт</a> · <a href="#" id="expl" style="color:var(--ac)">📤 Экспорт</a></p></div>
  <div class="card" id="stats"><div class="ct"><b>Статистика</b></div>
  <div class="mu">Выполнено задач за неделю</div><div class="bars" id="bars"></div>
  <div class="sum"><div><b data-n id="s-m">0</b><small>задач за месяц</small></div><div><b data-n id="s-h">0</b><small id="s-hl">часов работы</small></div><div><b data-n id="s-b">0</b><small>🔥 лучшая серия</small></div></div>
- <div class="sum"><div><b data-n id="s-d">0</b><small>дневных смен</small></div><div><b data-n id="s-n">0</b><small>ночных смен</small></div><div><b data-n id="s-v">0</b><small>дней отпуска</small></div></div>
+ <div class="sum sum4"><div><b data-n id="s-d">0</b><small>дневных</small></div><div><b data-n id="s-n">0</b><small>ночных</small></div><div><b data-n id="s-s">0</b><small>суточных</small></div><div><b data-n id="s-v">0</b><small>отпуск</small></div></div>
  <p class="mu" id="s-est" style="margin:6px 0 0"></p></div>
 </section>
 <section class="view" id="v-rem"><div class="card"><div id="rl"></div></div><p class="mu ctr">Ежедневные напоминания хранятся только на этом устройстве и не показываются в календаре.</p></section>
@@ -157,8 +157,8 @@ textarea{resize:none;min-height:70px}
 <div class="btns"><button type="button" class="sec" data-close>Отмена</button><button class="pri">Сохранить</button></div></form></div>
 
 <div class="sheet" id="sh-fill"><form id="f-fill"><div class="grab"></div><h3>Заполнить по графику</h3>
-<label>График</label><select id="fp"><option value="dn">День – ночь – отсыпной – выходной</option><option value="22d">2/2 дневные</option><option value="22n">2/2 ночные</option><option value="52">5/2 дневные (пн–пт)</option><option value="c">Свой: N смен / M выходных</option></select>
-<div id="fc" class="hid"><label>Тип смен</label><select id="fk"><option value="day">☀️ Дневные</option><option value="night">🌙 Ночные</option></select>
+<label>График</label><select id="fp"><option value="dn">День – ночь – отсыпной – выходной</option><option value="22d">2/2 дневные</option><option value="22n">2/2 ночные</option><option value="s13">Сутки через трое</option><option value="s12">Сутки через двое</option><option value="sn">Сутки – отсыпной – ночь – выходной</option><option value="52">5/2 дневные (пн–пт)</option><option value="c">Свой: N смен / M выходных</option></select>
+<div id="fc" class="hid"><label>Тип смен</label><select id="fk"><option value="day">☀️ Дневные</option><option value="night">🌙 Ночные</option><option value="sut">🕐 Суточные</option></select>
 <div class="two"><div><label>Смен</label><input type="number" id="fn" value="3" min="1" max="30" inputmode="numeric"></div><div><label>Выходных</label><input type="number" id="fm" value="3" min="1" max="30" inputmode="numeric"></div></div></div>
 <label>Первая смена</label><input type="date" id="fs">
 <label>Часы работы (необязательно)</label><div class="two"><input type="time" id="ffr"><input type="time" id="fto"></div>
@@ -173,7 +173,13 @@ textarea{resize:none;min-height:70px}
 <div class="sheet" id="sh-set"><div><div class="grab"></div><h3>Оформление</h3>
 <label>Тема</label><div class="chips" id="thm"><button data-v="dark">🌙 Тёмная</button><button data-v="light">☀️ Светлая</button><button data-v="auto">⚙︎ Авто</button></div>
 <label>Акцент</label><div class="acc" id="acc"></div>
-<button class="wide sec" data-close>Готово</button></div></div>
+<label>Резервная копия графика</label><div class="two"><button type="button" class="wide sec" id="impb">📥 Импорт графика</button><button type="button" class="wide sec" id="expb">📤 Экспорт</button></div>
+<button class="wide sec" data-close style="margin-top:10px">Готово</button></div></div>
+
+<div class="sheet" id="sh-imp"><form id="f-imp"><div class="grab"></div><h3 id="it">Импорт графика</h3>
+<textarea id="ic" placeholder="Вставьте код EZH1:…" style="min-height:120px;font-family:monospace;font-size:13px"></textarea>
+<p class="mu" id="ip" style="margin:0 0 12px">Даты из кода перезапишут отметки на эти дни</p>
+<div class="btns"><button type="button" class="sec" data-close>Отмена</button><button class="pri" id="ibt">Импортировать</button></div></form></div>
 
 <script>
 const M=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
@@ -183,7 +189,7 @@ W=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],WF=['воскресенье
 const H={};for(let y=2026;y<=2030;y++){for(let i=1;i<=6;i++)H[`${y}-01-0${i}`]='Новогодние каникулы';H[`${y}-01-07`]='Рождество Христово';H[`${y}-01-08`]='Новогодние каникулы';
 H[`${y}-02-23`]='День защитника Отечества';H[`${y}-03-08`]='Международный женский день';H[`${y}-05-01`]='Праздник Весны и Труда';H[`${y}-05-09`]='День Победы';H[`${y}-06-12`]='День России';H[`${y}-11-04`]='День народного единства'}
 H['2026-12-31']='Выходной день';
-const ST={day:['Дневная','☀️','#f59e0b'],night:['Ночная','🌙','#6366f1'],vac:['Отпуск','✈️','#10b981']};
+const ST={day:['Дневная','☀️','#f59e0b'],night:['Ночная','🌙','#5b5cf0'],sut:['Суточная','🕐','#22b8dc'],vac:['Отпуск','✈️','#10b981']};
 const TAGS={work:['Работа','#3b82f6'],home:['Дом','#f59e0b'],health:['Здоровье','#10b981'],me:['Личное','#ec4899']};
 const ACC=[['#8b5cf6','#ff6b8b'],['#06b6d4','#6366f1'],['#f97316','#ec4899'],['#10b981','#3b82f6']];
 const L=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},S=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
@@ -208,6 +214,20 @@ matchMedia('(prefers-color-scheme: light)').addEventListener?.('change',applySet
 const open=id=>$(id).classList.add('open'),close=id=>$(id).classList.remove('open');
 document.querySelectorAll('.sheet').forEach(s=>{s.addEventListener('click',e=>{if(e.target===s||e.target.closest('[data-close]'))close(s.id)})});
 $('setb').onclick=()=>open('sh-set');
+const CK={n:'night',s:'sut',d:'day',v:'vac'};
+function b64u(t){return btoa(unescape(encodeURIComponent(t))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function ub64(t){t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';return decodeURIComponent(escape(atob(t)))}
+function decImp(raw){const t=(raw||'').replace(/\s+/g,'');if(!/^EZH1:/i.test(t))throw 0;const o=JSON.parse(ub64(t.slice(5))),out={};
+for(const c in CK){(o[c]||[]).forEach(d=>{if(/^\d{4}-\d{2}-\d{2}$/.test(d))out[d]=CK[c]})}return out}
+function encExp(){const o={};for(const k in WK){const w=WK[k];const c=Object.keys(CK).find(c=>CK[c]==w.s);if(c)(o[c]=o[c]||[]).push(k)}for(const c in o)o[c].sort();return 'EZH1:'+b64u(JSON.stringify(o))}
+let impMode='i',impData=null;
+function openImp(m){impMode=m;close('sh-set');const e=m=='e';$('it').textContent=e?'Экспорт графика':'Импорт графика';$('ic').value=e?encExp():'';$('ic').readOnly=e;$('ibt').textContent=e?'Скопировать':'Импортировать';$('ip').textContent=e?'Сохраните этот код — им можно восстановить график':'Даты из кода перезапишут отметки на эти дни';open('sh-imp')}
+$('ic').oninput=()=>{if(impMode!='i')return;try{impData=decImp($('ic').value);const c={};Object.values(impData).forEach(s=>c[s]=(c[s]||0)+1);$('ip').textContent='Найдено: '+Object.entries(c).map(([s,n])=>ST[s][1]+' '+n).join(', ')}catch(_){impData=null;$('ip').textContent=$('ic').value.trim()?'Код не распознан':'Даты из кода перезапишут отметки на эти дни'}};
+$('f-imp').onsubmit=e=>{e.preventDefault();if(impMode=='e'){const v=$('ic').value;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast('Код скопирован',null),()=>{$('ic').select();toast('Выделите и скопируйте код',null)});return}
+try{impData=decImp($('ic').value)}catch(_){toast('Код не распознан',null);return}const ks=Object.keys(impData);if(!ks.length){toast('В коде нет дат',null);return}
+if(!confirm(`Импортировать ${ks.length} смен? Отметки на эти даты будут перезаписаны.`))return;ks.forEach(k=>{WK[k]=Object.assign({},WK[k]&&WK[k].s==impData[k]?WK[k]:{},{s:impData[k]})});S('ezh_work',WK);close('sh-imp');renderAll();toast('Импортировано смен: '+ks.length,null)};
+$('impb').onclick=()=>openImp('i');$('expb').onclick=()=>openImp('e');$('impl').onclick=e=>{e.preventDefault();openImp('i')};$('expl').onclick=e=>{e.preventDefault();openImp('e')};
+
 /* tasks model */
 function repMatch(r,k){if(k<r.start)return false;const d=pk(k),s=pk(r.start);switch(r.rule){case'daily':return true;case'weekdays':return d.getDay()%6!=0;case'weekly':return d.getDay()==s.getDay();case'monthly':return d.getDate()==s.getDate();}return false}
 function tasksFor(k){const a=(T[k]||[]).map((t,i)=>({kind:'o',i,text:t.text,done:!!t.done,tag:t.tag}));RP.forEach(r=>{if(repMatch(r,k)&&!(r.skip||{})[k])a.push({kind:'r',id:r.id,text:r.text,done:!!(r.done||{})[k],tag:r.tag,rule:r.rule})});return a}
@@ -247,16 +267,16 @@ $('note').oninput=()=>{const v=$('note').value;if(v.trim())NT[sel]=v;else delete
 function count(el,to){const fr=+el.dataset.v||0;el.dataset.v=to;const t0=performance.now(),dur=700,dec=to%1?1:0;const f=t=>{const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);el.textContent=(fr+(to-fr)*e).toFixed(dec).replace('.',',');if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)}
 function hrs(w){if(!w.from||!w.to)return null;const[a,b]=w.from.split(':').map(Number),[c,d]=w.to.split(':').map(Number);let m=(c*60+d)-(a*60+b);if(m<=0)m+=1440;return m/60}
 function renderWork(){$('wmt').textContent=M[vm]+' '+vy;grid($('wgrid'),vy,vm,'w');const n=new Date(vy,vm+1,0).getDate(),c={};let h=0,est=0;
-for(let i=1;i<=n;i++){const w=WK[key(new Date(vy,vm,i))];if(w&&ST[w.s]){c[w.s]=(c[w.s]||0)+1;if(w.s!='vac'){const x=hrs(w);if(x==null){h+=12;est++}else h+=x}}}
-$('wst').textContent='Итого за '+ML[vm];$('sum').innerHTML=[['day','Дневных'],['night','Ночных'],['vac','Отпуск']].map(x=>`<div><b>${ST[x[0]][1]} ${c[x[0]]||0}</b><small>${x[1]}</small></div>`).join('');
+for(let i=1;i<=n;i++){const w=WK[key(new Date(vy,vm,i))];if(w&&ST[w.s]){c[w.s]=(c[w.s]||0)+1;if(w.s!='vac'){const x=hrs(w);if(x==null){h+=w.s=='sut'?24:12;est++}else h+=x}}}
+$('wst').textContent='Итого за '+ML[vm];$('sum').innerHTML=[['day','Дневных'],['night','Ночных'],['sut','Суточных'],['vac','Отпуск']].map(x=>`<div><b>${ST[x[0]][1]} ${c[x[0]]||0}</b><small>${x[1]}</small></div>`).join('');
 // stats
 const t=new Date(),mon=new Date(t.getFullYear(),t.getMonth(),t.getDate()-((t.getDay()+6)%7));let bars='',mx=1,vals=[];
 for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);vals.push(tasksFor(key(d)).filter(x=>x.done).length)}mx=Math.max(1,...vals);
 $('bars').innerHTML=vals.map((v,i)=>`<div><em>${v||''}</em><i data-h="${Math.round(v/mx*80)}"></i><small>${W[i]}</small></div>`).join('');
 requestAnimationFrame(()=>requestAnimationFrame(()=>$('bars').querySelectorAll('i').forEach(i=>i.style.height=i.dataset.h+'%')));
 let md=0;for(let i=1;i<=n;i++)md+=tasksFor(key(new Date(vy,vm,i))).filter(x=>x.done).length;
-count($('s-m'),md);count($('s-h'),Math.round(h*10)/10);count($('s-b'),Math.max(0,...HB.map(best)));count($('s-d'),c.day||0);count($('s-n'),c.night||0);count($('s-v'),c.vac||0);
-$('s-hl').textContent=est?'≈ часов работы':'часов работы';$('s-est').textContent=est?`≈ Оценка: для ${est} смен без указанных часов считается по 12 ч.`:'';}
+count($('s-m'),md);count($('s-h'),Math.round(h*10)/10);count($('s-b'),Math.max(0,...HB.map(best)));count($('s-d'),c.day||0);count($('s-n'),c.night||0);count($('s-v'),c.vac||0);count($('s-s'),c.sut||0);
+$('s-hl').textContent=est?'≈ часов работы':'часов работы';$('s-est').textContent=est?`≈ Оценка: для ${est} смен без указанных часов считается по 24 ч для суточных и 12 ч для остальных.`:'';}
 function streak(hb){let s=0;const d=new Date();if(!hb.days[key(d)])d.setDate(d.getDate()-1);while(hb.days[key(d)]){s++;d.setDate(d.getDate()-1)}return s}
 function best(hb){const ks=Object.keys(hb.days).sort();let b=0,c=0,prev=null;ks.forEach(k=>{const d=pk(k);if(prev&&(d-prev)/864e5<1.5)c++;else c=1;b=Math.max(b,c);prev=d});return b}
 function renderHabits(){const tk=today();if(!HB.length){$('hl').innerHTML='<div class="empty"><div>✨</div>Привычек пока нет<br><small>Нажмите «Изменить», чтобы добавить</small></div>'}
@@ -304,7 +324,7 @@ function openW(k){wday=k;const w=WK[k]||{};$('wt').textContent=fmtD(k);wsel=ST[w
 $('f-wd').onsubmit=e=>{e.preventDefault();if(wsel){const o={s:wsel};if($('wfr').value)o.from=$('wfr').value;if($('wto').value)o.to=$('wto').value;if($('wn').value.trim())o.note=$('wn').value.trim();WK[wday]=o}else delete WK[wday];S('ezh_work',WK);close('sh-wd');renderAll()};
 $('fill').onclick=()=>{$('fs').value=today();open('sh-fill')};$('fp').onchange=()=>$('fc').classList.toggle('hid',$('fp').value!='c');
 $('f-fill').onsubmit=e=>{e.preventDefault();const v=$('fp').value,sd=$('fs').value;if(!sd)return;const st=pk(sd),en=new Date(st.getFullYear(),st.getMonth()+3,st.getDate());
-let cyc=v=='22d'?['day','day','','']:v=='22n'?['night','night','','']:v=='dn'?['day','night','','']:null;
+let cyc=v=='22d'?['day','day','','']:v=='22n'?['night','night','','']:v=='dn'?['day','night','','']:v=='s13'?['sut','','','']:v=='s12'?['sut','','']:v=='sn'?['sut','','night','']:null;
 if(v=='c'){const n=Math.max(1,+$('fn').value||1),mm=Math.max(1,+$('fm').value||1);cyc=Array(n).fill($('fk').value).concat(Array(mm).fill(''))}
 const plan={};let i=0;for(let t=new Date(st);t<en;t.setDate(t.getDate()+1),i++){const k=key(t);plan[k]=v=='52'?((t.getDay()%6==0||H[k])?'':'day'):cyc[i%cyc.length]}
 const ex=Object.keys(plan).filter(k=>WK[k]&&ST[WK[k].s]).length;if(ex&&!confirm(`В этом периоде уже отмечено дней: ${ex}. Перезаписать их?`))return;
