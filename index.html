@@ -1,0 +1,74 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ежедневник</title>
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Ежедневник">
+<meta name="theme-color" content="#2f6fed"><link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png">
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--tx:#16181d;--mu:#7a808c;--ac:#2f6fed;--red:#e5484d;--bd:#e4e6ea}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#1a1d23;--tx:#eceef2;--mu:#8b919c;--bd:#2a2e36;--ac:#5b8cff}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px -apple-system,system-ui,sans-serif;padding:env(safe-area-inset-top) 14px calc(20px + env(safe-area-inset-bottom))}
+h1{font-size:28px;margin:16px 4px 12px}
+.seg{display:flex;background:var(--bd);border-radius:10px;padding:3px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:none;color:var(--tx);padding:8px;border-radius:8px;font-size:15px}
+.seg button.on{background:var(--card);font-weight:600;box-shadow:0 1px 3px #0002}
+.card{background:var(--card);border-radius:14px;padding:12px;margin-bottom:14px}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.mh b{font-size:18px}.mh button{border:0;background:none;color:var(--ac);font-size:24px;padding:4px 12px}
+.g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.wd{font-size:12px;color:var(--mu);padding:4px 0}.wd.we{color:var(--red)}
+.d{aspect-ratio:1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:16px;position:relative;cursor:pointer}
+.d.we{color:var(--red)}.d.td{outline:2px solid var(--ac)}.d.sel{background:var(--ac);color:#fff}
+.d .n{font-size:10px;margin-top:1px;background:var(--ac);color:#fff;border-radius:8px;padding:0 5px;min-width:14px}
+.d.sel .n{background:#fff;color:var(--ac)}
+.hol{color:var(--red);font-size:14px;margin:4px 0 8px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--bd)}
+.row:last-child{border:0}.row .t{flex:1;word-break:break-word}.row.done .t{text-decoration:line-through;color:var(--mu)}
+.row input[type=checkbox]{width:22px;height:22px;accent-color:var(--ac)}
+.x{border:0;background:none;color:var(--mu);font-size:20px}
+.add{display:flex;gap:8px;margin-top:10px}
+.add input{flex:1;min-width:0;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:16px}
+.add input[type=time]{flex:0 0 105px}
+.add button{border:0;background:var(--ac);color:#fff;border-radius:10px;padding:0 16px;font-size:16px}
+.mu{color:var(--mu);font-size:14px}.hid{display:none}
+</style></head><body>
+<h1>Ежедневник</h1>
+<div class="seg"><button id="b1" class="on">Календарь</button><button id="b2">Напоминания</button></div>
+<div id="cal"><div class="card"><div class="mh"><button id="pv">‹</button><b id="mt"></b><button id="nx">›</button></div><div class="g" id="grid"></div></div>
+<div class="card"><b id="dt"></b><div id="dh" class="hol"></div><div id="tl"></div>
+<form class="add" id="tf"><input id="ti" placeholder="Новая задача" autocomplete="off"><button>+</button></form></div></div>
+<div id="rem" class="hid"><div class="card"><b>Ежедневные напоминания</b><div id="rl"></div>
+<form class="add" id="rf"><input type="time" id="rt" value="09:00"><input id="rx" placeholder="Текст" autocomplete="off"><button>+</button></form></div>
+<p class="mu">Напоминания хранятся только на этом устройстве и в календаре не показываются.</p></div>
+<script>
+const M=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'],
+W=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],WF=['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const H={};for(const y of[2026,2027,2028]){for(let i=1;i<=6;i++)H[`${y}-01-0${i}`]='Новогодние каникулы';H[`${y}-01-07`]='Рождество Христово';H[`${y}-01-08`]='Новогодние каникулы';
+H[`${y}-02-23`]='День защитника Отечества';H[`${y}-03-08`]='Международный женский день';H[`${y}-05-01`]='Праздник Весны и Труда';H[`${y}-05-09`]='День Победы';H[`${y}-06-12`]='День России';H[`${y}-11-04`]='День народного единства'}
+H['2026-12-31']='Выходной день';
+const L=k=>JSON.parse(localStorage.getItem(k)||'null'),S=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+let T=L('ezh_tasks')||{},R=L('ezh_rem')||[];
+const p=n=>String(n).padStart(2,'0'),key=d=>`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+const now=new Date();let vy=now.getFullYear(),vm=now.getMonth(),sel=key(now);
+const $=id=>document.getElementById(id),esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function cal(){$('mt').textContent=M[vm]+' '+vy;const tk=key(new Date());let h=W.map((w,i)=>`<div class="wd${i>4?' we':''}">${w}</div>`).join('');
+const off=(new Date(vy,vm,1).getDay()+6)%7,n=new Date(vy,vm+1,0).getDate();h+='<div></div>'.repeat(off);
+for(let i=1;i<=n;i++){const d=new Date(vy,vm,i),k=key(d),we=d.getDay()%6==0||H[k],c=(T[k]||[]).filter(t=>!t.done).length;
+h+=`<div class="d${we?' we':''}${k==tk?' td':''}${k==sel?' sel':''}" data-k="${k}">${i}${c?`<span class="n">${c}</span>`:''}</div>`}
+$('grid').innerHTML=h;day()}
+function day(){const[y,m,d]=sel.split('-').map(Number),dt=new Date(y,m-1,d);$('dt').textContent=`${d} ${MG[m-1]}, ${WF[dt.getDay()]}`;$('dh').textContent=H[sel]||'';
+const l=T[sel]||[];$('tl').innerHTML=l.length?l.map((t,i)=>`<div class="row${t.done?' done':''}"><input type="checkbox" data-i="${i}"${t.done?' checked':''}><span class="t">${esc(t.text)}</span><button class="x" data-d="${i}">×</button></div>`).join(''):'<p class="mu">Задач нет</p>'}
+function rem(){R.sort((a,b)=>a.time.localeCompare(b.time));$('rl').innerHTML=R.length?R.map((r,i)=>`<div class="row"><b>${r.time}</b><span class="t">${esc(r.text)}</span><button class="x" data-r="${i}">×</button></div>`).join(''):'<p class="mu">Напоминаний нет</p>'}
+$('grid').onclick=e=>{const el=e.target.closest('.d');if(el){sel=el.dataset.k;cal()}};
+$('pv').onclick=()=>{if(--vm<0){vm=11;vy--}cal()};$('nx').onclick=()=>{if(++vm>11){vm=0;vy++}cal()};
+$('tf').onsubmit=e=>{e.preventDefault();const v=$('ti').value.trim();if(!v)return;(T[sel]=T[sel]||[]).push({text:v,done:false});S('ezh_tasks',T);$('ti').value='';cal()};
+$('tl').onclick=e=>{const l=T[sel]||[];if(e.target.dataset.i!=null){l[e.target.dataset.i].done=e.target.checked}else if(e.target.dataset.d!=null){l.splice(e.target.dataset.d,1);if(!l.length)delete T[sel]}else return;S('ezh_tasks',T);cal()};
+$('rf').onsubmit=e=>{e.preventDefault();const v=$('rx').value.trim(),t=$('rt').value;if(!v||!t)return;R.push({time:t,text:v});S('ezh_rem',R);$('rx').value='';rem()};
+$('rl').onclick=e=>{if(e.target.dataset.r!=null){R.splice(e.target.dataset.r,1);S('ezh_rem',R);rem()}};
+$('b1').onclick=()=>{$('b1').className='on';$('b2').className='';$('cal').className='';$('rem').className='hid'};
+$('b2').onclick=()=>{$('b2').className='on';$('b1').className='';$('rem').className='';$('cal').className='hid'};
+cal();rem();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+</script></body></html>
