@@ -66,7 +66,7 @@ nav button.on{color:var(--ac);font-weight:600}nav svg{width:26px;height:26px}
 <div class="card" id="dc"><h2 id="dt"></h2><div id="dh" class="hol"></div><div id="tl"></div></div>
 <div class="card hid" id="wc"><b id="wst"></b><div class="sum" id="sum"></div><div class="lg" id="lg"></div>
 <button class="wide pri" id="fill" style="margin-top:14px">⚡ Заполнить по графику</button>
-<p class="mu" style="margin:10px 0 0">Нажмите на день, чтобы отметить статус</p></div></section>
+<p class="mu" style="margin:10px 0 0">Нажмите на день, чтобы отметить смену. Неотмеченный день — выходной</p></div></section>
 <section id="rem" class="hid"><div class="card"><div id="rl"></div></div>
 <p class="mu">Ежедневные напоминания хранятся только на этом устройстве и не показываются в календаре.</p></section>
 </main>
@@ -80,9 +80,9 @@ nav button.on{color:var(--ac);font-weight:600}nav svg{width:26px;height:26px}
 <label>Заметка</label><input id="wn" placeholder="Например: подмена" autocomplete="off">
 <div class="btns"><button type="button" class="sec" id="wcn">Отмена</button><button class="pri">Сохранить</button></div></form></div>
 <div class="sheet" id="fsh"><form id="ff"><h3>Заполнить по графику</h3>
-<label>График</label><select id="fp"><option value="52">5/2 (пн–пт, выходные сб–вс)</option><option value="22">2/2</option><option value="13">Сутки через трое (1/3)</option><option value="dn">День – ночь – отсыпной – выходной</option><option value="c">Свой: N рабочих / M выходных</option></select>
-<div class="two hid" id="fc"><div style="flex:1"><label>Рабочих</label><input type="number" id="fn" value="3" min="1" max="30" inputmode="numeric"></div><div style="flex:1"><label>Выходных</label><input type="number" id="fm" value="3" min="1" max="30" inputmode="numeric"></div></div>
-<label>Первый рабочий день</label><input type="date" id="fs">
+<label>График</label><select id="fp"><option value="dn">День – ночь – отсыпной – выходной</option><option value="22d">2/2 дневные</option><option value="22n">2/2 ночные</option><option value="52">5/2 дневные (пн–пт)</option><option value="c">Свой: N смен / M выходных</option></select>
+<div id="fc" class="hid"><label>Тип смен</label><select id="fk"><option value="day">☀️ Дневные</option><option value="night">🌙 Ночные</option></select><div class="two"><div style="flex:1"><label>Смен</label><input type="number" id="fn" value="3" min="1" max="30" inputmode="numeric"></div><div style="flex:1"><label>Выходных</label><input type="number" id="fm" value="3" min="1" max="30" inputmode="numeric"></div></div></div>
+<label>Первая смена</label><input type="date" id="fs">
 <label>Часы работы (необязательно)</label><div class="two"><input type="time" id="ffr"><input type="time" id="fto"></div>
 <p class="mu" style="margin:0 0 12px">Заполнит 3 месяца начиная с выбранной даты</p>
 <div class="btns"><button type="button" class="sec" id="fcn">Отмена</button><button class="pri">Заполнить</button></div></form></div>
@@ -116,15 +116,15 @@ function setTab(t){tab=t;$('b1').className=t==1?'on':'';$('b2').className=t==2?'
 $('b1').onclick=()=>setTab(1);$('b2').onclick=()=>setTab(2);
 $('fab').onclick=()=>{const[y,m,d]=sel.split('-').map(Number);$('sht').textContent=tab==1?`Задача на ${d} ${MG[m-1]}`:'Ежедневное напоминание';$('rt').className=tab==1?'hid':'';$('si').placeholder=tab==1?'Что нужно сделать?':'Текст напоминания';$('si').value='';$('sh').classList.add('open');setTimeout(()=>$('si').focus(),50)};
 
-const ST={work:['Рабочий','💼','#3b82f6'],off:['Выходной','🛋','#94a3b8'],day:['Дневная смена','☀️','#f59e0b'],night:['Ночная смена','🌙','#6366f1'],vac:['Отпуск','✈️','#10b981'],sick:['Больничный','🤒','#ec4899']};
+const ST={day:['Дневная','☀️','#f59e0b'],night:['Ночная','🌙','#6366f1'],vac:['Отпуск','✈️','#10b981']};
 let WK=L('ezh_work')||{},mode=localStorage.getItem('ezh_mode')||'t',wday=null,wsel=null;
 function seg(){[...$('seg').children].forEach(b=>b.className=b.dataset.m==mode?'on':'');$('gc').classList.toggle('wk',mode=='w');$('dc').classList.toggle('hid',mode=='w');$('wc').classList.toggle('hid',mode!='w');$('fab').classList.toggle('hid',mode=='w'&&tab==1)}
 $('seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;localStorage.setItem('ezh_mode',mode);seg();cal()};
 $('lg').innerHTML=Object.values(ST).map(v=>`<span><i style="background:${v[2]}"></i>${v[1]} ${v[0]}</span>`).join('');
-function wsum(){const n=new Date(vy,vm+1,0).getDate(),c={};for(let i=1;i<=n;i++){const w=WK[key(new Date(vy,vm,i))];if(w)c[w.s]=(c[w.s]||0)+1}
-$('wst').textContent='Итого за '+M[vm].toLowerCase();const it=[['Рабочих дней',(c.work||0)+(c.day||0)+(c.night||0)],['Дневных смен',c.day||0],['Ночных смен',c.night||0],['Выходных',c.off||0],['Отпуск',c.vac||0],['Больничный',c.sick||0]];
+function wsum(){const n=new Date(vy,vm+1,0).getDate(),c={};for(let i=1;i<=n;i++){const w=WK[key(new Date(vy,vm,i))];if(w&&ST[w.s])c[w.s]=(c[w.s]||0)+1}
+$('wst').textContent='Итого за '+M[vm].toLowerCase();const it=[['Дневных',c.day||0],['Ночных',c.night||0],['Отпуск',c.vac||0]];
 $('sum').innerHTML=it.map(x=>`<div><b>${x[1]}</b><small>${x[0]}</small></div>`).join('')}
-$('stg').innerHTML=Object.entries(ST).map(([k,v])=>`<button type="button" data-s="${k}" style="background:${v[2]}">${v[1]} ${v[0]}</button>`).join('')+'<button type="button" data-s="" class="clr" style="grid-column:span 2">Очистить</button>';
+$('stg').innerHTML=Object.entries(ST).map(([k,v])=>`<button type="button" data-s="${k}" style="background:${v[2]}">${v[1]} ${v[0]}</button>`).join('')+'<button type="button" data-s="" class="clr">🧹 Очистить</button>';
 $('stg').onclick=e=>{const b=e.target.closest('button');if(!b)return;wsel=b.dataset.s;[...$('stg').children].forEach(x=>x.classList.toggle('on',x==b))};
 function openW(k){wday=k;const w=WK[k]||{},[y,m,d]=k.split('-').map(Number);$('wt').textContent=`${d} ${MG[m-1]}`;wsel=w.s||'';[...$('stg').children].forEach(x=>x.classList.toggle('on',!!w.s&&x.dataset.s==w.s));$('wfr').value=w.from||'';$('wto').value=w.to||'';$('wn').value=w.note||'';$('wsh').classList.add('open')}
 $('wcn').onclick=()=>$('wsh').classList.remove('open');$('wsh').onclick=e=>{if(e.target.id=='wsh')$('wsh').classList.remove('open')};
@@ -133,11 +133,11 @@ $('fill').onclick=()=>{$('fs').value=key(new Date());$('fsh').classList.add('ope
 $('fp').onchange=()=>$('fc').classList.toggle('hid',$('fp').value!='c');
 $('fcn').onclick=()=>$('fsh').classList.remove('open');$('fsh').onclick=e=>{if(e.target.id=='fsh')$('fsh').classList.remove('open')};
 $('ff').onsubmit=e=>{e.preventDefault();const v=$('fp').value,sd=$('fs').value;if(!sd)return;const[y,m,d]=sd.split('-').map(Number),st=new Date(y,m-1,d),en=new Date(y,m+2,d);
-let cyc=v=='22'?['work','work','off','off']:v=='13'?['work','off','off','off']:v=='dn'?['day','night','off','off']:null;
-if(v=='c'){const n=Math.max(1,+$('fn').value||1),mm=Math.max(1,+$('fm').value||1);cyc=Array(n).fill('work').concat(Array(mm).fill('off'))}
-const plan={};let i=0;for(let t=new Date(st);t<en;t.setDate(t.getDate()+1),i++){const k=key(t);plan[k]=v=='52'?((t.getDay()%6==0||H[k])?'off':'work'):cyc[i%cyc.length]}
-const ex=Object.keys(plan).filter(k=>WK[k]).length;if(ex&&!confirm(`В этом периоде уже отмечено дней: ${ex}. Перезаписать их?`))return;
-const fr=$('ffr').value,to=$('fto').value;for(const k in plan){const o={s:plan[k]};if(o.s!='off'){if(fr)o.from=fr;if(to)o.to=to}WK[k]=o}
+let cyc=v=='22d'?['day','day','',''] :v=='22n'?['night','night','','']:v=='dn'?['day','night','','']:null;
+if(v=='c'){const n=Math.max(1,+$('fn').value||1),mm=Math.max(1,+$('fm').value||1);cyc=Array(n).fill($('fk').value).concat(Array(mm).fill(''))}
+const plan={};let i=0;for(let t=new Date(st);t<en;t.setDate(t.getDate()+1),i++){const k=key(t);plan[k]=v=='52'?((t.getDay()%6==0||H[k])?'':'day'):cyc[i%cyc.length]}
+const ex=Object.keys(plan).filter(k=>WK[k]&&ST[WK[k].s]).length;if(ex&&!confirm(`В этом периоде уже отмечено дней: ${ex}. Перезаписать их?`))return;
+const fr=$('ffr').value,to=$('fto').value;for(const k in plan){if(!plan[k]){delete WK[k];continue}const o={s:plan[k]};if(fr)o.from=fr;if(to)o.to=to;WK[k]=o}
 S('ezh_work',WK);$('fsh').classList.remove('open');cal()};
 const close=()=>$('sh').classList.remove('open');$('cn').onclick=close;$('sh').onclick=e=>{if(e.target.id=='sh')close()};
 $('sf').onsubmit=e=>{e.preventDefault();const v=$('si').value.trim();if(!v)return;if(tab==1){(T[sel]=T[sel]||[]).push({text:v,done:false});S('ezh_tasks',T);cal()}else{if(!$('rt').value)return;R.push({time:$('rt').value,text:v});S('ezh_rem',R);rem()}close()};
