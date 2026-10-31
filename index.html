@@ -42,12 +42,31 @@ nav button.on{color:var(--ac);font-weight:600}nav svg{width:26px;height:26px}
 .sheet h3{margin:0 0 12px}.sheet input{width:100%;font-size:17px;padding:14px;border-radius:14px;border:1px solid var(--bd);background:var(--card);color:var(--tx);margin-bottom:10px}
 .btns{display:flex;gap:10px}.btns button{flex:1;height:50px;border-radius:14px;border:0;font-size:17px;font-weight:600}
 .pri{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff}.sec{background:var(--bd);color:var(--tx)}
+.seg{display:flex;background:rgba(255,255,255,.25);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;min-height:40px;border:0;background:none;color:#fff;font-size:15px;font-weight:600;border-radius:11px;transition:background .2s,color .2s}
+.seg button.on{background:var(--card);color:var(--ac);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.bar{width:60%;height:3px;border-radius:2px;margin-top:2px}
+.wk .d{height:50px;font-size:16px}.wk .d .em{font-size:11px;line-height:1;height:12px}
+.wk .d.st{color:#fff;font-weight:600}.wk .d.td{box-shadow:inset 0 0 0 2px var(--tx)}
+.lg{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px;color:var(--mu);margin-top:4px}.lg span{display:flex;align-items:center;gap:5px}.lg i{width:12px;height:12px;border-radius:4px}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.sum div{background:var(--bd);border-radius:14px;padding:10px 6px;text-align:center}.sum b{display:block;font-size:22px}.sum small{color:var(--mu);font-size:12px}
+.wide{width:100%;height:50px;border:0;border-radius:14px;font-size:17px;font-weight:600;margin-top:4px}
+.stg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stg button{min-height:48px;border-radius:14px;border:2px solid transparent;font-size:15px;font-weight:600;color:#fff}.stg button.on{border-color:var(--tx);transform:scale(.97)}
+.stg button.clr{background:var(--bd);color:var(--tx)}
+.two{display:flex;gap:8px}.two input{flex:1}
+.sheet label{font-size:13px;color:var(--mu);display:block;margin:0 0 4px 4px}
+.sheet select{width:100%;font-size:17px;padding:14px;border-radius:14px;border:1px solid var(--bd);background:var(--card);color:var(--tx);margin-bottom:10px;-webkit-appearance:none}
+.sheet form{max-height:90vh;overflow:auto}
 .mu{color:var(--mu);font-size:14px;text-align:center;padding:0 10px}.hid{display:none}
 </style></head><body>
 <header><small id="today"></small><h1 id="ttl">Ежедневник</h1></header>
 <main>
-<section id="cal"><div class="card"><div class="mh"><button class="ib" id="pv" aria-label="Назад">‹</button><b id="mt"></b><button class="ib" id="nx" aria-label="Вперёд">›</button></div><div class="g" id="grid"></div></div>
-<div class="card" id="dc"><h2 id="dt"></h2><div id="dh" class="hol"></div><div id="tl"></div></div></section>
+<section id="cal"><div class="seg" id="seg"><button data-m="t">Задачи</button><button data-m="w">График работы</button></div><div class="card" id="gc"><div class="mh"><button class="ib" id="pv" aria-label="Назад">‹</button><b id="mt"></b><button class="ib" id="nx" aria-label="Вперёд">›</button></div><div class="g" id="grid"></div></div>
+<div class="card" id="dc"><h2 id="dt"></h2><div id="dh" class="hol"></div><div id="tl"></div></div>
+<div class="card hid" id="wc"><b id="wst"></b><div class="sum" id="sum"></div><div class="lg" id="lg"></div>
+<button class="wide pri" id="fill" style="margin-top:14px">⚡ Заполнить по графику</button>
+<p class="mu" style="margin:10px 0 0">Нажмите на день, чтобы отметить статус</p></div></section>
 <section id="rem" class="hid"><div class="card"><div id="rl"></div></div>
 <p class="mu">Ежедневные напоминания хранятся только на этом устройстве и не показываются в календаре.</p></section>
 </main>
@@ -56,6 +75,17 @@ nav button.on{color:var(--ac);font-weight:600}nav svg{width:26px;height:26px}
 <button id="b2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>Напоминания</button></nav>
 <div class="sheet" id="sh"><form id="sf"><h3 id="sht"></h3><input type="time" id="rt" value="09:00" class="hid"><input id="si" placeholder="Что нужно сделать?" autocomplete="off">
 <div class="btns"><button type="button" class="sec" id="cn">Отмена</button><button class="pri">Добавить</button></div></form></div>
+<div class="sheet" id="wsh"><form id="wf"><h3 id="wt"></h3><div class="stg" id="stg"></div>
+<label>Часы работы (необязательно)</label><div class="two"><input type="time" id="wfr"><input type="time" id="wto"></div>
+<label>Заметка</label><input id="wn" placeholder="Например: подмена" autocomplete="off">
+<div class="btns"><button type="button" class="sec" id="wcn">Отмена</button><button class="pri">Сохранить</button></div></form></div>
+<div class="sheet" id="fsh"><form id="ff"><h3>Заполнить по графику</h3>
+<label>График</label><select id="fp"><option value="52">5/2 (пн–пт, выходные сб–вс)</option><option value="22">2/2</option><option value="13">Сутки через трое (1/3)</option><option value="dn">День – ночь – отсыпной – выходной</option><option value="c">Свой: N рабочих / M выходных</option></select>
+<div class="two hid" id="fc"><div style="flex:1"><label>Рабочих</label><input type="number" id="fn" value="3" min="1" max="30" inputmode="numeric"></div><div style="flex:1"><label>Выходных</label><input type="number" id="fm" value="3" min="1" max="30" inputmode="numeric"></div></div>
+<label>Первый рабочий день</label><input type="date" id="fs">
+<label>Часы работы (необязательно)</label><div class="two"><input type="time" id="ffr"><input type="time" id="fto"></div>
+<p class="mu" style="margin:0 0 12px">Заполнит 3 месяца начиная с выбранной даты</p>
+<div class="btns"><button type="button" class="sec" id="fcn">Отмена</button><button class="pri">Заполнить</button></div></form></div>
 <script>
 const M=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
 MG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'],
@@ -72,19 +102,44 @@ $('today').textContent=`Сегодня, ${now.getDate()} ${MG[now.getMonth()]}, 
 function cal(){$('mt').textContent=M[vm]+' '+vy;const tk=key(new Date());let h=W.map((w,i)=>`<div class="wd${i>4?' we':''}">${w}</div>`).join('');
 const off=(new Date(vy,vm,1).getDay()+6)%7,n=new Date(vy,vm+1,0).getDate();h+='<div></div>'.repeat(off);
 for(let i=1;i<=n;i++){const d=new Date(vy,vm,i),k=key(d),we=d.getDay()%6==0||H[k],c=(T[k]||[]).filter(t=>!t.done).length;
-h+=`<div class="d${we?' we':''}${k==tk?' td':''}${k==sel?' sel':''}" data-k="${k}">${i}<span class="dots">${'<i></i>'.repeat(Math.min(c,3))}</span></div>`}
-$('grid').innerHTML=h;day()}
+const w=WK[k],sw=w&&ST[w.s];if(mode=='w'){h+=`<div class="d${we&&!sw?' we':''}${sw?' st':''}${k==tk?' td':''}" data-k="${k}" style="${sw?'background:'+sw[2]:''}">${i}<span class="em">${sw?sw[1]:''}</span></div>`;continue}
+h+=`<div class="d${we?' we':''}${k==tk?' td':''}${k==sel?' sel':''}" data-k="${k}">${i}<span class="dots">${'<i></i>'.repeat(Math.min(c,3))}</span>${sw?`<span class="bar" style="background:${sw[2]}"></span>`:''}</div>`}
+$('grid').innerHTML=h;day();if(mode=='w')wsum()}
 function day(){const[y,m,d]=sel.split('-').map(Number),dt=new Date(y,m-1,d);const w=WF[dt.getDay()];$('dt').textContent=`${d} ${MG[m-1]}, ${w}`;$('dh').textContent=H[sel]?'🎉 '+H[sel]:'';
 const l=T[sel]||[];$('tl').innerHTML=l.length?l.map((t,i)=>`<div class="row${t.done?' done':''}"><button class="ck" data-i="${i}" aria-label="Готово">${t.done?'✓':''}</button><span class="t">${esc(t.text)}</span><button class="x" data-d="${i}" aria-label="Удалить">×</button></div>`).join(''):'<div class="empty"><div>🌿</div>На этот день задач нет<br><small>Нажмите «+», чтобы добавить</small></div>'}
 function rem(){R.sort((a,b)=>a.time.localeCompare(b.time));$('rl').innerHTML=R.length?R.map((r,i)=>`<div class="row"><span class="tm">${esc(r.time)}</span><span class="t">${esc(r.text)}</span><button class="x" data-r="${i}" aria-label="Удалить">×</button></div>`).join(''):'<div class="empty"><div>🔔</div>Напоминаний пока нет<br><small>Нажмите «+», чтобы добавить</small></div>'}
-$('grid').onclick=e=>{const el=e.target.closest('.d');if(el){sel=el.dataset.k;cal()}};
+$('grid').onclick=e=>{const el=e.target.closest('.d');if(!el)return;if(mode=='w')openW(el.dataset.k);else{sel=el.dataset.k;cal()}};
 $('pv').onclick=()=>{if(--vm<0){vm=11;vy--}cal()};$('nx').onclick=()=>{if(++vm>11){vm=0;vy++}cal()};
 $('tl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const l=T[sel]||[];if(b.dataset.i!=null)l[b.dataset.i].done=!l[b.dataset.i].done;else{l.splice(b.dataset.d,1);if(!l.length)delete T[sel]}S('ezh_tasks',T);cal()};
 $('rl').onclick=e=>{const b=e.target.closest('button');if(b){R.splice(b.dataset.r,1);S('ezh_rem',R);rem()}};
-function setTab(t){tab=t;$('b1').className=t==1?'on':'';$('b2').className=t==2?'on':'';$('cal').className=t==1?'':'hid';$('rem').className=t==2?'':'hid';$('ttl').textContent=t==1?'Ежедневник':'Напоминания'}
+function setTab(t){tab=t;$('b1').className=t==1?'on':'';$('b2').className=t==2?'on':'';$('cal').className=t==1?'':'hid';$('rem').className=t==2?'':'hid';$('ttl').textContent=t==1?'Ежедневник':'Напоминания';seg()}
 $('b1').onclick=()=>setTab(1);$('b2').onclick=()=>setTab(2);
 $('fab').onclick=()=>{const[y,m,d]=sel.split('-').map(Number);$('sht').textContent=tab==1?`Задача на ${d} ${MG[m-1]}`:'Ежедневное напоминание';$('rt').className=tab==1?'hid':'';$('si').placeholder=tab==1?'Что нужно сделать?':'Текст напоминания';$('si').value='';$('sh').classList.add('open');setTimeout(()=>$('si').focus(),50)};
+
+const ST={work:['Рабочий','💼','#3b82f6'],off:['Выходной','🛋','#94a3b8'],day:['Дневная смена','☀️','#f59e0b'],night:['Ночная смена','🌙','#6366f1'],vac:['Отпуск','✈️','#10b981'],sick:['Больничный','🤒','#ec4899']};
+let WK=L('ezh_work')||{},mode=localStorage.getItem('ezh_mode')||'t',wday=null,wsel=null;
+function seg(){[...$('seg').children].forEach(b=>b.className=b.dataset.m==mode?'on':'');$('gc').classList.toggle('wk',mode=='w');$('dc').classList.toggle('hid',mode=='w');$('wc').classList.toggle('hid',mode!='w');$('fab').classList.toggle('hid',mode=='w'&&tab==1)}
+$('seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;localStorage.setItem('ezh_mode',mode);seg();cal()};
+$('lg').innerHTML=Object.values(ST).map(v=>`<span><i style="background:${v[2]}"></i>${v[1]} ${v[0]}</span>`).join('');
+function wsum(){const n=new Date(vy,vm+1,0).getDate(),c={};for(let i=1;i<=n;i++){const w=WK[key(new Date(vy,vm,i))];if(w)c[w.s]=(c[w.s]||0)+1}
+$('wst').textContent='Итого за '+M[vm].toLowerCase();const it=[['Рабочих дней',(c.work||0)+(c.day||0)+(c.night||0)],['Дневных смен',c.day||0],['Ночных смен',c.night||0],['Выходных',c.off||0],['Отпуск',c.vac||0],['Больничный',c.sick||0]];
+$('sum').innerHTML=it.map(x=>`<div><b>${x[1]}</b><small>${x[0]}</small></div>`).join('')}
+$('stg').innerHTML=Object.entries(ST).map(([k,v])=>`<button type="button" data-s="${k}" style="background:${v[2]}">${v[1]} ${v[0]}</button>`).join('')+'<button type="button" data-s="" class="clr" style="grid-column:span 2">Очистить</button>';
+$('stg').onclick=e=>{const b=e.target.closest('button');if(!b)return;wsel=b.dataset.s;[...$('stg').children].forEach(x=>x.classList.toggle('on',x==b))};
+function openW(k){wday=k;const w=WK[k]||{},[y,m,d]=k.split('-').map(Number);$('wt').textContent=`${d} ${MG[m-1]}`;wsel=w.s||'';[...$('stg').children].forEach(x=>x.classList.toggle('on',!!w.s&&x.dataset.s==w.s));$('wfr').value=w.from||'';$('wto').value=w.to||'';$('wn').value=w.note||'';$('wsh').classList.add('open')}
+$('wcn').onclick=()=>$('wsh').classList.remove('open');$('wsh').onclick=e=>{if(e.target.id=='wsh')$('wsh').classList.remove('open')};
+$('wf').onsubmit=e=>{e.preventDefault();if(wsel){const o={s:wsel};if($('wfr').value)o.from=$('wfr').value;if($('wto').value)o.to=$('wto').value;if($('wn').value.trim())o.note=$('wn').value.trim();WK[wday]=o}else delete WK[wday];S('ezh_work',WK);$('wsh').classList.remove('open');cal()};
+$('fill').onclick=()=>{$('fs').value=key(new Date());$('fsh').classList.add('open')};
+$('fp').onchange=()=>$('fc').classList.toggle('hid',$('fp').value!='c');
+$('fcn').onclick=()=>$('fsh').classList.remove('open');$('fsh').onclick=e=>{if(e.target.id=='fsh')$('fsh').classList.remove('open')};
+$('ff').onsubmit=e=>{e.preventDefault();const v=$('fp').value,sd=$('fs').value;if(!sd)return;const[y,m,d]=sd.split('-').map(Number),st=new Date(y,m-1,d),en=new Date(y,m+2,d);
+let cyc=v=='22'?['work','work','off','off']:v=='13'?['work','off','off','off']:v=='dn'?['day','night','off','off']:null;
+if(v=='c'){const n=Math.max(1,+$('fn').value||1),mm=Math.max(1,+$('fm').value||1);cyc=Array(n).fill('work').concat(Array(mm).fill('off'))}
+const plan={};let i=0;for(let t=new Date(st);t<en;t.setDate(t.getDate()+1),i++){const k=key(t);plan[k]=v=='52'?((t.getDay()%6==0||H[k])?'off':'work'):cyc[i%cyc.length]}
+const ex=Object.keys(plan).filter(k=>WK[k]).length;if(ex&&!confirm(`В этом периоде уже отмечено дней: ${ex}. Перезаписать их?`))return;
+const fr=$('ffr').value,to=$('fto').value;for(const k in plan){const o={s:plan[k]};if(o.s!='off'){if(fr)o.from=fr;if(to)o.to=to}WK[k]=o}
+S('ezh_work',WK);$('fsh').classList.remove('open');cal()};
 const close=()=>$('sh').classList.remove('open');$('cn').onclick=close;$('sh').onclick=e=>{if(e.target.id=='sh')close()};
 $('sf').onsubmit=e=>{e.preventDefault();const v=$('si').value.trim();if(!v)return;if(tab==1){(T[sel]=T[sel]||[]).push({text:v,done:false});S('ezh_tasks',T);cal()}else{if(!$('rt').value)return;R.push({time:$('rt').value,text:v});S('ezh_rem',R);rem()}close()};
-cal();rem();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+seg();cal();rem();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>
