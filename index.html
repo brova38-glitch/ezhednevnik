@@ -194,6 +194,9 @@ const TAGS={work:['Работа','#3b82f6'],home:['Дом','#f59e0b'],health:['�
 const ACC=[['#8b5cf6','#ff6b8b'],['#06b6d4','#6366f1'],['#f97316','#ec4899'],['#10b981','#3b82f6']];
 const L=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},S=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 let T=L('ezh_tasks',{}),R=L('ezh_rem',[]),WK=L('ezh_work',{}),RP=L('ezh_rep',[]),HB=L('ezh_habits',[]),NT=L('ezh_notes',{}),SET=L('ezh_set',{theme:'dark',acc:0});
+if(!localStorage.getItem('ezh_seed_v1')){const SD={'2026-11':[[3,6,9,12,18,24,27,30],[15,21]],'2026-12':[[3,9,15,18,21,24],[6,12]],'2027-01':[[14,20,26,29],[17,23]],'2027-02':[[1,4,10,16,19,25],[7,13,22,28]],'2027-03':[[3,9,12,15,18,24,30],[6,21,27]]};
+for(const m in SD)SD[m].forEach((a,x)=>a.forEach(d=>{const k=m+'-'+String(d).padStart(2,'0');if(!WK[k]||!WK[k].s)WK[k]=Object.assign({},WK[k],{s:x?'sut':'night'})}));
+try{localStorage.setItem('ezh_work',JSON.stringify(WK));localStorage.setItem('ezh_seed_v1','1')}catch(_){}}
 if(Array.isArray(T)||typeof T!='object')T={};
 const p=n=>String(n).padStart(2,'0'),key=d=>`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`,pk=k=>{const[y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
