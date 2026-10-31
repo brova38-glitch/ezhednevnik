@@ -62,7 +62,7 @@ nav button.on{color:var(--ac);font-weight:600}nav svg{width:26px;height:26px}
 </style></head><body>
 <header><small id="today"></small><h1 id="ttl">Ежедневник</h1></header>
 <main>
-<section id="cal"><div class="seg" id="seg"><button data-m="t">Задачи</button><button data-m="w">График работы</button></div><div class="card" id="gc"><div class="mh"><button class="ib" id="pv" aria-label="Назад">‹</button><b id="mt"></b><button class="ib" id="nx" aria-label="Вперёд">›</button></div><div class="g" id="grid"></div></div>
+<section id="cal"><div class="card" id="gc"><div class="mh"><button class="ib" id="pv" aria-label="Назад">‹</button><b id="mt"></b><button class="ib" id="nx" aria-label="Вперёд">›</button></div><div class="g" id="grid"></div></div>
 <div class="card" id="dc"><h2 id="dt"></h2><div id="dh" class="hol"></div><div id="tl"></div></div>
 <div class="card hid" id="wc"><b id="wst"></b><div class="sum" id="sum"></div><div class="lg" id="lg"></div>
 <button class="wide pri" id="fill" style="margin-top:14px">⚡ Заполнить по графику</button>
@@ -71,7 +71,8 @@ nav button.on{color:var(--ac);font-weight:600}nav svg{width:26px;height:26px}
 <p class="mu">Ежедневные напоминания хранятся только на этом устройстве и не показываются в календаре.</p></section>
 </main>
 <button class="fab" id="fab" aria-label="Добавить">+</button>
-<nav><button id="b1" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Календарь</button>
+<nav><button id="b1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Календарь</button>
+<button id="b3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>График</button>
 <button id="b2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>Напоминания</button></nav>
 <div class="sheet" id="sh"><form id="sf"><h3 id="sht"></h3><input type="time" id="rt" value="09:00" class="hid"><input id="si" placeholder="Что нужно сделать?" autocomplete="off">
 <div class="btns"><button type="button" class="sec" id="cn">Отмена</button><button class="pri">Добавить</button></div></form></div>
@@ -112,14 +113,14 @@ $('grid').onclick=e=>{const el=e.target.closest('.d');if(!el)return;if(mode=='w'
 $('pv').onclick=()=>{if(--vm<0){vm=11;vy--}cal()};$('nx').onclick=()=>{if(++vm>11){vm=0;vy++}cal()};
 $('tl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const l=T[sel]||[];if(b.dataset.i!=null)l[b.dataset.i].done=!l[b.dataset.i].done;else{l.splice(b.dataset.d,1);if(!l.length)delete T[sel]}S('ezh_tasks',T);cal()};
 $('rl').onclick=e=>{const b=e.target.closest('button');if(b){R.splice(b.dataset.r,1);S('ezh_rem',R);rem()}};
-function setTab(t){tab=t;$('b1').className=t==1?'on':'';$('b2').className=t==2?'on':'';$('cal').className=t==1?'':'hid';$('rem').className=t==2?'':'hid';$('ttl').textContent=t==1?'Ежедневник':'Напоминания';seg()}
-$('b1').onclick=()=>setTab(1);$('b2').onclick=()=>setTab(2);
+function setTab(t){tab=t;mode=t==3?'w':'t';localStorage.setItem('ezh_tab',t);[1,2,3].forEach(i=>$('b'+i).className=t==i?'on':'');$('cal').className=t==2?'hid':'';$('rem').className=t==2?'':'hid';$('ttl').textContent=t==1?'Ежедневник':t==3?'График работы':'Напоминания';seg();cal()}
+
 $('fab').onclick=()=>{const[y,m,d]=sel.split('-').map(Number);$('sht').textContent=tab==1?`Задача на ${d} ${MG[m-1]}`:'Ежедневное напоминание';$('rt').className=tab==1?'hid':'';$('si').placeholder=tab==1?'Что нужно сделать?':'Текст напоминания';$('si').value='';$('sh').classList.add('open');setTimeout(()=>$('si').focus(),50)};
 
 const ST={day:['Дневная','☀️','#f59e0b'],night:['Ночная','🌙','#6366f1'],vac:['Отпуск','✈️','#10b981']};
-let WK=L('ezh_work')||{},mode=localStorage.getItem('ezh_mode')||'t',wday=null,wsel=null;
-function seg(){[...$('seg').children].forEach(b=>b.className=b.dataset.m==mode?'on':'');$('gc').classList.toggle('wk',mode=='w');$('dc').classList.toggle('hid',mode=='w');$('wc').classList.toggle('hid',mode!='w');$('fab').classList.toggle('hid',mode=='w'&&tab==1)}
-$('seg').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;localStorage.setItem('ezh_mode',mode);seg();cal()};
+let WK=L('ezh_work')||{},mode='t',wday=null,wsel=null;
+function seg(){$('gc').classList.toggle('wk',mode=='w');$('dc').classList.toggle('hid',mode=='w');$('wc').classList.toggle('hid',mode!='w');$('fab').classList.toggle('hid',tab==3)}
+
 $('lg').innerHTML=Object.values(ST).map(v=>`<span><i style="background:${v[2]}"></i>${v[1]} ${v[0]}</span>`).join('');
 function wsum(){const n=new Date(vy,vm+1,0).getDate(),c={};for(let i=1;i<=n;i++){const w=WK[key(new Date(vy,vm,i))];if(w&&ST[w.s])c[w.s]=(c[w.s]||0)+1}
 $('wst').textContent='Итого за '+M[vm].toLowerCase();const it=[['Дневных',c.day||0],['Ночных',c.night||0],['Отпуск',c.vac||0]];
@@ -141,5 +142,5 @@ const fr=$('ffr').value,to=$('fto').value;for(const k in plan){if(!plan[k]){dele
 S('ezh_work',WK);$('fsh').classList.remove('open');cal()};
 const close=()=>$('sh').classList.remove('open');$('cn').onclick=close;$('sh').onclick=e=>{if(e.target.id=='sh')close()};
 $('sf').onsubmit=e=>{e.preventDefault();const v=$('si').value.trim();if(!v)return;if(tab==1){(T[sel]=T[sel]||[]).push({text:v,done:false});S('ezh_tasks',T);cal()}else{if(!$('rt').value)return;R.push({time:$('rt').value,text:v});S('ezh_rem',R);rem()}close()};
-seg();cal();rem();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+[1,2,3].forEach(i=>$('b'+i).onclick=()=>setTab(i));rem();setTab(+localStorage.getItem('ezh_tab')||(localStorage.getItem('ezh_mode')=='w'?3:1));if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>
